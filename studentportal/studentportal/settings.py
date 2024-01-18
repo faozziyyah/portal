@@ -78,8 +78,17 @@ WSGI_APPLICATION = 'studentportal.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'django_lms',
+        'USER': 'root',
+        'PASSWORD': 'OPEyemi2001',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+        }
+        #'ENGINE': 'django.db.backends.sqlite3',
+        #'NAME': BASE_DIR / 'db.sqlite3',
         #'ENGINE': os.environ.get('DB_DRIVER', 'django.db.backends.postgresql'),
         #'NAME': os.environ.get('PG_DB','postgres'),
         #'USER': os.environ.get('PG_USER','postgres'),

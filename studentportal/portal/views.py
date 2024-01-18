@@ -1,7 +1,29 @@
 from rest_framework.response import Response
+from rest_framework import viewsets, status
 from rest_framework.decorators import api_view
+from rest_framework.permissions import IsAuthenticated
+from .models import *
+from .serializers import *
 
 # Create your views here.
+
+class TeacherViewSet(viewsets.ModelViewSet):
+    serializer_class = TeacherSerializer
+    queryset = Teacher.objects.all()
+    def get_permissions(self):
+        permission_classes = []
+        if self.request.method != 'GET':
+            permission_classes = [IsAuthenticated]
+
+        return [permission() for permission in permission_classes]
+
+class StudentViewSet(viewsets.ModelViewSet):
+    serializer_class = StudentSerializer
+    queryset = Student.objects.all()
+
+class CourseViewSet(viewsets.ModelViewSet):
+    serializer_class = CourseSerializer
+    queryset = Course.objects.all()
 
 #get all users
 #@api_view(['GET'])

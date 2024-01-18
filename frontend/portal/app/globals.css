@@ -25,3 +25,9 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+.home-right{
+  background-image: url(../public/images/Ellipse\ 35.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+}
