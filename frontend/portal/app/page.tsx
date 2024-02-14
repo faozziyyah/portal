@@ -14,7 +14,7 @@ export default function Home() {
 
         <div className='flex items-center justify-between w-96 mt-6'>
           <Link href='/login' className='text-white bg-blue-800 border-black border-none rounded-lg py-2 px-4 text-sm'>Login as a Student</Link>
-          <Link href='/' className='text-black border-solid border-2 border-black rounded-lg py-2 px-4 text-sm'>Login as a Teacher</Link>
+          <Link href='/login' className='text-black border-solid border-2 border-black rounded-lg py-2 px-4 text-sm'>Login as a Teacher</Link>
         </div>
 
       </aside>

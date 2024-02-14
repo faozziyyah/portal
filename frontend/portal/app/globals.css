@@ -36,7 +36,7 @@ body {
   background-size: cover;
 }
 
-.search-bar{
+.search-bar, .course-box{
   box-shadow: rgba(82, 81, 81, 0.35) 0px 5px 15px;
 }
 
@@ -60,4 +60,8 @@ body {
 .course{
   width: 45%;
   align-items: center;
+}
+
+.profile-header{
+  width: 30%;
 }

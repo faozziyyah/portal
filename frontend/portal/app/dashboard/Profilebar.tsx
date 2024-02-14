@@ -2,10 +2,7 @@ import React, { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Menu, MenuItem } from 'react-pro-sidebar';
-import { Home } from '@mui/icons-material';
-import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
-import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
+import { Home, People, Contacts } from '@mui/icons-material';
 
 const Profilebar = () => {
 
@@ -38,12 +35,12 @@ const Profilebar = () => {
 
           <Menu>
 
-            <MenuItem icon={<Home />} onClick={handleToggleProfileMenu}>Dashboard 
+            <MenuItem icon={<Home />} onClick={handleToggleProfileMenu}>Profile 
               <Link href="/" />
             </MenuItem>
-            <MenuItem icon={<HomeOutlinedIcon />}>Favorites</MenuItem>
-            <MenuItem icon={<PeopleOutlinedIcon />}>Setting</MenuItem>
-            <MenuItem icon={<ContactsOutlinedIcon />}>Log Out</MenuItem>
+            <MenuItem icon={<Home />}>Favorites</MenuItem>
+            <MenuItem icon={<People/>}>Setting</MenuItem>
+            <MenuItem icon={<Contacts />}>Log Out</MenuItem>
 
           </Menu>
 
