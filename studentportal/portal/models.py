@@ -5,7 +5,7 @@ from django.db import models
 class Teacher(models.Model):
     name=models.CharField(max_length=100)
     email=models.CharField(max_length=100)
-    address=models.TextField(max_length=100)
+    skills=models.TextField(max_length=100)
     phone=models.CharField(max_length=100)
     password=models.CharField(max_length=100)
     qualifications=models.CharField(max_length=100)
