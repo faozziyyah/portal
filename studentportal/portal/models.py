@@ -5,10 +5,10 @@ from django.db import models
 class Teacher(models.Model):
     name=models.CharField(max_length=100)
     email=models.CharField(max_length=100)
-    skills=models.TextField(max_length=100)
+    skills=models.TextField(max_length=100, blank=True)
     phone=models.CharField(max_length=100)
     password=models.CharField(max_length=100)
-    qualifications=models.CharField(max_length=100)
+    qualifications=models.CharField(max_length=100, blank=True)
 
 # Student model
 class Student(models.Model):

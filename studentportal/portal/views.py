@@ -10,12 +10,12 @@ from .serializers import *
 class TeacherViewSet(viewsets.ModelViewSet):
     serializer_class = TeacherSerializer
     queryset = Teacher.objects.all()
-    def get_permissions(self):
-        permission_classes = []
-        if self.request.method != 'GET':
-            permission_classes = [IsAuthenticated]
-
-        return [permission() for permission in permission_classes]
+    #def get_permissions(self):
+    #    permission_classes = []
+    #    if self.request.method != 'GET':
+    #        permission_classes = [IsAuthenticated]
+#
+    #    return [permission() for permission in permission_classes]
 
 class StudentViewSet(viewsets.ModelViewSet):
     serializer_class = StudentSerializer
