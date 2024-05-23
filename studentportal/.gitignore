@@ -1,0 +1,6 @@
+venv/
+
+# Ignore all migration files
+migrations/
+_migrations/*
+**/migrations/

@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 import os
 from pathlib import Path
+import datetime
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -36,15 +37,25 @@ INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
+    'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'portal',
     'corsheaders',
     'rest_framework',
-    #'rest_framework.authtoken',
-    #'djoser',
+    'rest_framework.authtoken',
+    'djoser',
+    #'allauth',
+    #'allauth.account',
+    #'allauth.socialaccount',
+    #'dj_rest_auth',
+    #'dj_rest_auth.registration',
+    "rest_framework_simplejwt.token_blacklist",
+    'portal',
+    'drf_yasg',
     #'django_filters',
 ]
+
+SITE_ID = 1
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -55,6 +66,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    #'allauth.account.middleware.AccountMiddleware',
+    #'portal.middleware.EnsureProfileMiddleware',
 ]
 
 ROOT_URLCONF = 'studentportal.urls'
@@ -127,10 +140,15 @@ REST_FRAMEWORK = {
     #'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     #'PAGE_SIZE': 3,
 
-    #'DEFAULT_AUTHENTICATION_CLASSES': (
-    #    'rest_framework.authentication.TokenAuthentication',
-    #    'rest_framework.authentication.SessionAuthentication',
-    #),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        #'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
+
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
 
     #'DEFAULT_RENDERER_CLASSES': [
     #    'rest_framework.renderers.JSONRenderer',
@@ -159,6 +177,27 @@ REST_FRAMEWORK = {
 
 }
 
+# Django Allauth configuration
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_AUTHENTICATION_METHOD = 'username'
+ACCOUNT_EMAIL_REQUIRED = True
+
+SIMPLE_JWT = {
+    "AUTH_HEADER_TYPES": ("Bearer",),
+    "ACCESS_TOKEN_LIFETIME": datetime.timedelta(days=13),
+    "REFRESH_TOKEN_LIFETIME": datetime.timedelta(days=10),
+}
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+# configure Djoser
+DJOSER = {
+    "PASSWORD_RESET_CONFIRM_URL": "auth/password/reset-password-confirmation/?uid={uid}&token={token}",
+    "ACTIVATION_URL": "#/activate/{uid}/{token}",
+    "SEND_ACTIVATION_EMAIL": False,
+    "SERIALIZERS": {},
+}
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
@@ -177,11 +216,18 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+SITE_NAME = "Test Portal Next.js"
+
+DOMAIN = 'localhost:3000'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# URL for the front end
+ACCOUNT_LOGOUT_ON_GET = True
+
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_ALL_ORIGINS= True
-CORS_ALLOWed_ORIGINS=["http://localhost:3000",]
+CORS_ALLOWED_ORIGINS=["http://localhost:3000",]
