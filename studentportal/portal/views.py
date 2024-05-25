@@ -33,6 +33,7 @@ class LoginView(generics.GenericAPIView):
         return Response({
             'refresh': str(refresh),
             'access': str(refresh.access_token),
+            'username': user.username,
         }, status=status.HTTP_200_OK)
 
 class LogoutView(generics.GenericAPIView):
@@ -63,7 +64,10 @@ class CourseCategoryViewSet(viewsets.ModelViewSet):
 class CourseViewSet(viewsets.ModelViewSet):
     serializer_class = CourseSerializer
     queryset = Course.objects.all()
-    permission_classes = [IsAuthenticated, IsTeacher]
+    permission_classes = [IsAuthenticated]
+
+    #def perform_create(self, serializer):
+    #    serializer.save(instructor=self.request.user)
 
 class LessonViewSet(viewsets.ModelViewSet):
     queryset = Lesson.objects.all()
@@ -75,12 +79,54 @@ class EnrollmentViewSet(viewsets.ModelViewSet):
     serializer_class = EnrollmentSerializer
     permission_classes = [permissions.IsAuthenticated, IsStudent]
 
+class UserEnrolledCoursesView(generics.ListAPIView):
+    serializer_class = CourseSerializer
+    permission_classes = [IsAuthenticated, IsStudent]
+
+    def get_queryset(self):
+        user = self.request.user
+        enrollments = Enrollment.objects.filter(user=user)
+        course_ids = enrollments.values_list('course_id', flat=True)
+        return Course.objects.filter(id__in=course_ids)
+
 class AssignmentViewSet(viewsets.ModelViewSet):
     queryset = Assignment.objects.all()
     serializer_class = AssignmentSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+class UserAssignmentsView(generics.ListAPIView):
+    serializer_class = AssignmentSerializer
+    permission_classes = [IsAuthenticated, IsStudent]
+
+    def get_queryset(self):
+        user = self.request.user
+        enrollments = Enrollment.objects.filter(user=user)
+        course_ids = enrollments.values_list('course_id', flat=True)
+        return Assignment.objects.filter(course_id__in=course_ids)
+
+class AssignmentDetailView(generics.RetrieveAPIView):
+    queryset = Assignment.objects.all()
+    serializer_class = AssignmentSerializer
+    permission_classes = [IsAuthenticated]
+
 class SubmissionViewSet(viewsets.ModelViewSet):
     queryset = Submission.objects.all()
     serializer_class = SubmissionSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+    def perform_create(self, serializer):
+        # Pass the currently authenticated user to the serializer for submission creation
+        serializer.save()
+
+    #def perform_create(self, serializer):
+    #    # Check if the user is enrolled in the course
+    #    user = self.request.user
+    #    assignment = serializer.validated_data['assignment']
+    #    course = assignment.course
+#
+    #    enrollment = Enrollment.objects.filter(user=user, course=course).first()
+    #    if not enrollment:
+    #        raise serializers.ValidationError("User is not enrolled in the course.")
+#
+    #    # Save the submission with the user context
+    #    serializer.save(student=user, assignment=assignment)

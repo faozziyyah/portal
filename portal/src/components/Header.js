@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
 import { Menu, MenuItem } from 'react-pro-sidebar';
-import { Home, People, Contacts } from '@mui/icons-material';
+import { Home, People } from '@mui/icons-material';
 import {Link} from 'react-router-dom'
-import student from './assets/College Student.png'
-import arrow from './assets/chevron-down.png'
-import bell from './assets/bell-ringing.png'
+import student from '../assets/College Student.png'
+import arrow from '../assets/chevron-down.png'
+import bell from '../assets/bell-ringing.png'
+import Logout from './Logout';
 
-const Header = () => {
+const Header = ({ searchTerm, handleSearchChange }) => {
 
     const [profileMenu, setProfileMenu] = useState(false);
   
@@ -20,7 +21,7 @@ const Header = () => {
         <div className='search-bar justify-between items-center rounded-xl px-2'>
 
             <input 
-                type='text' 
+                type='text' placeholder="Search by title" value={searchTerm} onChange={handleSearchChange}
                 className='text-black border-none text-sm rounded-md w-80 bg-transparent px-4 py-2 outline-none' 
             />
 
@@ -57,15 +58,7 @@ const Header = () => {
                   <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z" />
                 
                 </svg>
-              </div>
-              
-              <div className="flex-auto">
-                <a href="#" className="block font-semibold text-gray-900">
-                  Analytics
-                  <span className="absolute inset-0"></span>
-                </a>
-                <p className="mt-1 text-gray-600">Get a better understanding of your traffic</p>
-              </div>
+              </div>=
 
             </div>
           
@@ -84,7 +77,7 @@ const Header = () => {
               
               <MenuItem icon={<Home />}>Favorites</MenuItem>
               <MenuItem icon={<People />}>Setting</MenuItem>
-              <MenuItem icon={<Contacts />}>Log Out</MenuItem>
+              <Logout />
 
             </Menu>
 

@@ -4,10 +4,17 @@ import { Home, People, Contacts } from '@mui/icons-material';
 import {Link} from 'react-router-dom'
 import student from '../assets/College Student.png'
 import arrow from '../assets/chevron-down.png'
+import Logout from './Logout';
 
 const Profilebar = () => {
 
     const [profileMenu, setProfileMenu] = useState(false);
+
+    const userData = localStorage.getItem('user-info')
+  
+    const userdetail = JSON.parse(userData)
+  
+    const username = userdetail.data.username
   
     const handleToggleProfileMenu = () => {
       setProfileMenu(!profileMenu);
@@ -21,7 +28,7 @@ const Profilebar = () => {
         <img src={student} className='rounded-full bg-purple-500' alt='' width='50' height='50' />
 
         <div className='w-2/4'>
-          <h3 className='font-bold text-sm'>John Doe</h3>
+          <h3 className='font-bold text-sm'>{username}</h3>
           <p className='text-xs'>student</p>
         </div>
 
@@ -40,7 +47,8 @@ const Profilebar = () => {
             </MenuItem>
             <MenuItem icon={<Home />}>Favorites</MenuItem>
             <MenuItem icon={<People/>}>Setting</MenuItem>
-            <MenuItem icon={<Contacts />}>Log Out</MenuItem>
+            <Logout />
+            {/*<MenuItem icon={<Contacts />}>Log Out</MenuItem>*/}
 
           </Menu>
 

@@ -73,8 +73,8 @@ class InstructorSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'first_name', 'last_name']
 
 class CourseSerializer(serializers.ModelSerializer):
-    #category = CourseCategorySerializer()
-    category = serializers.PrimaryKeyRelatedField(queryset=CourseCategory.objects.all())
+    category = CourseCategorySerializer()
+    #category = serializers.PrimaryKeyRelatedField(queryset=CourseCategory.objects.all())
     instructor = InstructorSerializer(read_only=True)
    # instructor = UserSerializer()
     class Meta:
@@ -82,15 +82,12 @@ class CourseSerializer(serializers.ModelSerializer):
         fields = ['id', 'title', 'category', 'description', 'instructor']
 
     def create(self, validated_data):
-        category = validated_data.pop('category')
+        category_data = validated_data.pop('category')
         #instructor = validated_data.pop('instructor')
+        #category = self.context['category']
         instructor = self.context['request'].user
 
-        # Fetch or create the category
-        #category, created = CourseCategory.objects.get_or_create(**category_data)
-
-        # Fetch the instructor
-        #instructor = User.objects.get(id=instructor['id'])
+        category, created = CourseCategory.objects.get_or_create(**category_data)
 
         # Create the course
         course = Course.objects.create(category=category, instructor=instructor, **validated_data)
@@ -170,9 +167,16 @@ class AssignmentSerializer(serializers.ModelSerializer):
         return instance
 
 class SubmissionSerializer(serializers.ModelSerializer):
-    assignment = AssignmentSerializer()
-    student = UserSerializer()
+    #assignment = AssignmentSerializer()
+    assignment = serializers.PrimaryKeyRelatedField(queryset=Assignment.objects.all(), write_only=True)
+    #student = UserSerializer()
 
     class Meta:
         model = Submission
-        fields = ['id', 'assignment', 'student', 'file', 'submitted_on', 'grade']
+        fields = ['id', 'assignment', 'file', 'submitted_on', 'grade']
+
+    def create(self, validated_data):
+        # Automatically set the student to the currently authenticated user
+        validated_data['student'] = self.context['request'].user
+        submission = Submission.objects.create(**validated_data)
+        return submission

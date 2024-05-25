@@ -28,15 +28,27 @@ const Sidemenu = () => {
             <MenuItem icon={<MenuOutlinedIcon />} onClick={handleToggleSidebar} className=''>
               <h2>Minimize Menu</h2>
             </MenuItem>
-
-            <MenuItem icon={<Home />} onClick={handleToggleSidebar}>Dashboard 
-              <Link to="/" />
-            </MenuItem>
             
-            <MenuItem icon={<People />}>Courses</MenuItem>
-            <MenuItem icon={<Contacts />}>Assignments</MenuItem>
-            <MenuItem icon={<Receipt />}>Messages</MenuItem>
-            <MenuItem icon={<HelpOutline />}>Results</MenuItem>
+            <Link to="/studentdashboard">
+              <MenuItem icon={<Home />} onClick={handleToggleSidebar}>Dashboard </MenuItem>
+            </Link>
+            
+            <Link to="/enrolled-courses">
+              <MenuItem icon={<People />}>Courses</MenuItem>
+            </Link>
+            
+            <Link to="/assignments">
+              <MenuItem icon={<Contacts />}>Assignments</MenuItem>
+            </Link>
+            
+            <Link to="/enrolled-courses">
+              <MenuItem icon={<Receipt />}>Messages</MenuItem>
+            </Link>
+            
+            <Link to="/enrolled-courses">
+              <MenuItem icon={<HelpOutline />}>Results</MenuItem>
+            </Link>
+            
             <MenuItem icon={<CalendarToday />}>Logout</MenuItem>
 
         </Menu>
