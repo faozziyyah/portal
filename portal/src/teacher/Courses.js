@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import Header from './components/Header';
 import Sidemenu from './components/Sidemenu'
-import Courseslist from './Courseslist';
+import TeacherCourseslist from './Courseslist';
 
-const Courses = () => {
+const TeacherCourses = () => {
 
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -20,7 +20,7 @@ const Courses = () => {
 
           <Header searchTerm={searchTerm} handleSearchChange={handleSearchChange} />
 
-          <Courseslist searchTerm={searchTerm} />
+          <TeacherCourseslist searchTerm={searchTerm} />
 
         </section>
     
@@ -28,4 +28,4 @@ const Courses = () => {
   )
 }
 
-export default Courses
+export default TeacherCourses

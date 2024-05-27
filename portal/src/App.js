@@ -1,12 +1,34 @@
 import './App.css';
-import { Route,Routes } from 'react-router-dom'
+import { Route, Routes, Navigate } from 'react-router-dom'
 import Layout from './Layout';
-import Signup from './components/Signup';
-import Login from './components/Login';
 import Dashboard from './students/Dashboard';
 import Courses from './students/Courses';
 import Enrolledcourses from './students/Enrolledcourses';
 import Assignments from './students/Assignments';
+import TeacherDashboard from './teacher/Dashboard';
+import TeacherCourses from './teacher/Courses';
+import Login from './Login';
+import Signup from './Signup';
+
+const PrivateRoute = ({ children }) => {
+  const userType = localStorage.getItem('user_type');
+  const isAuthenticated = !!localStorage.getItem('access_token');
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" />;
+  }
+
+  if (userType === 'teacher') {
+    return <Navigate to="/teacherdashboard" />;
+  }
+
+  if (userType === 'student') {
+    return <Navigate to="/studentdashboard" />;
+  }
+
+  return children;
+};
+
 
 function App() {
   return (
@@ -16,10 +38,13 @@ function App() {
         <Route path='/' index element={<Layout />} />
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<Signup />} />
-        <Route path='/studentdashboard' element={<Dashboard />} />
+        <Route path='/studentdashboard' element={<PrivateRoute><Dashboard /></PrivateRoute>} />
         <Route path='/courses' element={<Courses />} />
         <Route path='/enrolled-courses' element={<Enrolledcourses />} />
         <Route path='/assignments' element={<Assignments />} />
+        <Route path='/teacherdashboard' element={<PrivateRoute><TeacherDashboard /></PrivateRoute>} />
+        <Route path='/teachercourses' element={<TeacherCourses />} />
+        <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
 
     </div>

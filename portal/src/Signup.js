@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import img from '../assets/Group.png'
-import img1 from '../assets/Frame.png'
+import img from './assets/Group.png'
+import img1 from './assets/Frame.png'
 import axios from "axios";
 
 const Signup = () => {
@@ -16,7 +16,7 @@ const Signup = () => {
         password: '',
         first_name: '',
         last_name: '',
-        user_type: 'student', // Default role
+        user_type: '', // Default role
     });
 
     const [error, setError] = useState(null);
@@ -39,7 +39,18 @@ const Signup = () => {
             // Redirect or show success message
             localStorage.setItem('signup-id', JSON.stringify(response))
 
-            navigate("/studentdashboard")
+            const userData = localStorage.getItem('signup-id')
+            const userdetail = JSON.parse(userData)
+            const user_type = userdetail.data.user_type
+            console.log(user_type)
+
+            if (user_type === 'teacher') {
+              navigate('/teacherdashboard');
+            } else {
+              navigate('/studentdashboard');
+            }
+
+            //navigate("/studentdashboard")
         } catch (error) {
             console.error('There was an error registering the user:', error);
             setError('Failed to register. Please try again.');
@@ -57,6 +68,8 @@ const Signup = () => {
           <img src={img} alt='' width='150' height='100' />
           <h1 className='text-black font-bold text-4xl w-20 mt-3 ml-4'><span className='text-4xl text-rose-700'>E</span>du Learn</h1>
         </div>
+
+        {error && <p severity="error">{error}</p>}
 
         <form onSubmit={handleSubmit} className='flex flex-col items-center justify-between w-96 mt-6'>
 

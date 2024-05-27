@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import {Link, useNavigate} from 'react-router-dom'
+import {Link} from 'react-router-dom'
 import bg from '../assets/bg.jpg'
 import avatar from '../assets/avatar-6.jpg'
 import { fetchEnrolledCourses } from '../api';
+import axiosInstance from '../axiosConfig';
 
 const Enrolled = ({ searchTerm }) => {
+
     const [enrolledCourses, setEnrolledCourses] = useState([]);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
-    const navigate = useNavigate();
 
     useEffect(() => {
   
@@ -34,6 +35,21 @@ const Enrolled = ({ searchTerm }) => {
         }
     };
 
+    const handleUnenroll = async (courseId) => {
+      try {
+        await axiosInstance.delete(`courses/${courseId}/unenroll/`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+          },
+        });
+
+        //alert({ type: 'success', text: 'Unenrolled successfully!' });
+      } catch (error) {
+        console.error('Error unenrolling from course:', error);
+        setError('Failed to unenroll from the course..');
+      }
+    };
+
     const filteredCourses = enrolledCourses.filter((course) =>
         course.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
@@ -46,7 +62,7 @@ const Enrolled = ({ searchTerm }) => {
 
             <div className='courses-header flex justify-between items-center'>
               <p className='text-black font-bold'>Enrolled Courses</p>
-              <Link to='/dashboard/courses' className='text-purple-700 font-bold'> See all</Link>
+              <Link to='/courses' className='text-purple-700 font-bold'> See all</Link>
             </div>
 
             {loading && 
@@ -74,9 +90,14 @@ const Enrolled = ({ searchTerm }) => {
                     </div>
 
                     <div id='div' className='w-full text-left'>
-                      <p className='text-black text-md ml-2 font-semibold'>{course.title}</p>
+                      <p className='text-black text-md ml-2 font-semibold capitalize'>{course.title}</p>
                       <p className='text-black text-sm ml-2 font-semibold'>{course.description}</p>
-                      <p className='text-black text-sm ml-2 font-semibold'>Instructor: {course.instructor.username}</p>
+                      <p className='text-black text-sm ml-2 font-semibold capitalize'>Instructor: {course.instructor.username}</p>
+                      <button onClick={() => handleUnenroll(course.id)}
+                        className='text-white bg-purple-600 text-md rounded-2xl mt-2 flex justify-center px-6 py-1 ml-2 font-semibold'
+                      >
+                        Unenroll
+                      </button>
                     </div>
 
                   </Link>

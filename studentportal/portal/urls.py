@@ -15,7 +15,7 @@ router.register(r'submissions', SubmissionViewSet)
 router.register(r'register', RegisterViewSet)
 
 urlpatterns = [
-    path('enrolled-courses/', UserEnrolledCoursesView.as_view(), name='user-enrolled-courses'),
+    #path('enrolled-courses/', UserEnrolledCoursesView.as_view(), name='user-enrolled-courses'),
     path('assignments/', UserAssignmentsView.as_view(), name='user-assignments'),
     path('assignment/<int:pk>/', AssignmentDetailView.as_view(), name='assignment-detail'),
     path('', include(router.urls)),

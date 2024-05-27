@@ -18,14 +18,20 @@ const Courseslist = ({ searchTerm }) => {
   }, []);
 
   const fetchCourses = async () => {
+
       setLoading(true);
+
       try {
+
           const response = await axiosInstance.get('courses/');
           //console.log(response.data)
           setCourses(response.data);
           setLoading(false);
+
       }  catch (error) {
+
         console.error('There was an error fetching courses:', error);
+
         if (error.response && error.response.status === 403) {
             setError('You are not authorized to view this content. Please log in.');
             // Redirect to login page if not authorized
@@ -34,6 +40,33 @@ const Courseslist = ({ searchTerm }) => {
             setError('Failed to fetch courses.');
         }
         setLoading(false);
+    }
+  };
+
+  /*const userData = localStorage.getItem('user-info')
+  const userdetail = JSON.parse(userData)
+  const id = userdetail.data.id
+  console.log(id)*/
+
+  const handleEnroll = async (courseId) => {
+
+    try {
+
+      await axiosInstance.post('enrollments/', 
+      { course: courseId }, 
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+      });
+      // Update the courses list to reflect the new enrollment
+      setCourses((prevCourses) =>
+        prevCourses.map((course) =>
+          course.id === courseId ? { ...course, is_enrolled: true } : course
+        )
+      );
+    } catch (error) {
+      console.error('Error enrolling in course:', error);
     }
   };
 
@@ -77,9 +110,20 @@ const Courseslist = ({ searchTerm }) => {
                   </div>
 
                   <div id='div' className='w-full text-left'>
-                    <p className='text-black text-md ml-2 font-semibold'>{course.title}</p>
+                    <p className='text-black text-md ml-2 font-semibold capitalize'>{course.title}</p>
                     <p className='text-black text-sm ml-2 font-semibold'>{course.description}</p>
-                    <p className='text-black text-sm ml-2 font-semibold'>Instructor: {course.instructor.username}</p>
+                    <p className='text-black text-sm ml-2 font-semibold capitalize'>Instructor: {course.instructor.username}</p>
+                    {course.is_enrolled ? (
+                      <button className='text-white bg-purple-600 text-md rounded-2xl mt-2 flex justify-center px-6 py-1 ml-2 font-semibold'>
+                        Already Enrolled
+                      </button>
+                    ) : (
+                      <button onClick={() => handleEnroll(course.id)}
+                        className='text-white bg-purple-600 text-md rounded-2xl mt-2 flex justify-center px-6 py-1 ml-2 font-semibold'
+                      >
+                        Enroll
+                      </button>
+                    )}
                   </div>
 
                 </Link>

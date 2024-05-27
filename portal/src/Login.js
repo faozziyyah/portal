@@ -1,9 +1,9 @@
 import React, {useState} from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from "axios";
-import axiosInstance from '../axiosConfig';
-import img from '../assets/Group.png'
-import img1 from '../assets/Frame.png'
+import axiosInstance from './axiosConfig';
+import img from './assets/Group.png'
+import img1 from './assets/Frame.png'
 
 const Login = () => {
 
@@ -29,7 +29,7 @@ const Login = () => {
 
       try {
           const response = await axios.post('http://localhost:8000/api/login/', formData);
-          console.log('Login successful:', response);
+          //console.log('Login successful:', response);
           // Redirect or show success message
           localStorage.setItem('user-info', JSON.stringify(response))
           localStorage.setItem('access_token', response.data.access);
@@ -37,19 +37,19 @@ const Login = () => {
           axiosInstance.defaults.headers['Authorization'] = `Bearer ${response.data.access}`;
 
           const userData = localStorage.getItem('user-info')
-
           const userdetail = JSON.parse(userData)
+          //const username = userdetail.data.username
+          const user_type = userdetail.data.user_type
+          //console.log(username)
+          //console.log(user_type)
 
-          const username = userdetail.data.username
-          console.log(username)
-
-          /*if (userdetail.data.type === 'admin') {
-            navigate("/admin")
+          if (user_type === 'teacher') {
+            navigate('/teacherdashboard');
           } else {
-            navigate("/dashboard")
-          }*/
+            navigate('/studentdashboard');
+          }
 
-          navigate("/studentdashboard")
+          //navigate("/studentdashboard")
           setLoading(false); 
       } catch (error) {
           console.error('There was an error loggin in:', error);
@@ -68,6 +68,8 @@ const Login = () => {
           <img src={img} alt='' width='200' height='100' />
           <h1 className='text-black font-bold text-4xl w-20 mt-6 ml-4'><span className='text-4xl text-rose-700'>E</span>du Learn</h1>
         </div>
+
+        {error && <p severity="error">{error}</p>}
 
         <form onSubmit={handleLogin} className='flex flex-col items-center justify-between w-96 mt-6'>
 

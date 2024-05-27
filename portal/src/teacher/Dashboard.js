@@ -6,20 +6,18 @@ import student from '../assets/College Student.png'
 import bag from '../assets/Backpack.png'
 import laptop from '../assets/laptop.png'
 import chart from '../assets/chart.png'
-import Profilebar from './components/Profilebar'
-import Sidemenu from './components/Sidemenu'
+import Profilebar from '../students/components/Profilebar'
+import Sidemenu from '../students/components/Sidemenu'
 import { fetchAssignmentById } from '../api';
 
-const Dashboard = ({ assignmentId = 1  }) => {
+const TeacherDashboard = ({ assignmentId = 1  }) => {
 
   const [assignment, setAssignment] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const userData = localStorage.getItem('user-info')
-
   const userdetail = JSON.parse(userData)
-
   const username = userdetail.data.username
 
     useEffect(() => {
@@ -44,7 +42,13 @@ const Dashboard = ({ assignmentId = 1  }) => {
     };
 
     if (loading) {
-        return <p>Loading...</p>;
+        return (
+          <div className="loading-dots">
+            <span className="dot"></span>
+            <span className="dot"></span>
+            <span className="dot"></span>
+          </div>
+        );
     }
 
     if (error) {
@@ -72,7 +76,7 @@ const Dashboard = ({ assignmentId = 1  }) => {
               className='text-black border-none text-sm rounded-md w-80 bg-transparent px-4 py-2 outline-none' 
             />
 
-            <button>search</button>
+            <button className='mr-2'>search</button>
 
           </div>
 
@@ -87,7 +91,7 @@ const Dashboard = ({ assignmentId = 1  }) => {
           <aside className='flex flex-col ml-4 items-start text-white mb-8'>
             <p className='text-xs mt-4 text-slate-300'>January 27, 2024</p>
             <h3 className='mt-8 text-3xl font-semibold text-left'>Welcome back, {username}!</h3>
-            <p className='text-xs text-slate-300 mt-2 font-semibold'>Always stay updated in your student portal</p>
+            <p className='text-xs text-slate-300 font-semibold mt-2'>Always stay updated in your Instructor portal</p>
           </aside>
 
           <div className='image-container flex justify-center items-center'>
@@ -101,8 +105,8 @@ const Dashboard = ({ assignmentId = 1  }) => {
         <section className='courses mt-8'> 
 
           <div className='courses-header flex justify-between items-center'>
-            <p className='text-black font-bold'>Enrolled Courses</p>
-            <p className='text-black font-bold'>Latest Courses</p>
+            <p className='text-black font-bold'>Courses</p>
+            <p className='text-black font-bold'>Lessons</p>
             {/*<Link href='/dashboard/courses' className='text-purple-700 font-bold'> See all</Link>*/}
           </div>
 
@@ -112,7 +116,7 @@ const Dashboard = ({ assignmentId = 1  }) => {
 
               <div className='flex flex-col justify-center items-start'>
                 <p className='text-purple-600 font-semibold text-sm'>object oriented <br /> programming</p>
-                <Link to='/enrolled-courses' 
+                <Link to='/teachercourses' 
                   className='text-white bg-purple-600 text-sm rounded-2xl mt-2 flex justify-center px-6 py-1'> 
                   View all
                </Link>
@@ -156,8 +160,8 @@ const Dashboard = ({ assignmentId = 1  }) => {
                 <p className='font-semibold capitalize'>{assignment.title}</p>
                 <p className=''>{assignment.description}</p>
                 <p className=''>Due Date: {assignment.due_date}</p>
-                <p className=''>Status</p>
-                <p className='font-semibold'>Submit</p>
+                <p className=''>Edit</p>
+                <p className='font-semibold'>Delete</p>
                 
               </Link>
 
@@ -175,4 +179,4 @@ const Dashboard = ({ assignmentId = 1  }) => {
   )
 }
 
-export default Dashboard
+export default TeacherDashboard

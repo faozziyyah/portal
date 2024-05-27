@@ -5,7 +5,7 @@ const API_URL = 'http://127.0.0.1:8000/api';  // Update with your Django backend
 
 export const fetchEnrolledCourses = async (token) => {
     try {
-        const response = await axios.get(`${API_URL}/enrolled-courses/`, {
+        const response = await axios.get(`${API_URL}/courses/enrolled/`, {
             headers: {
                 Authorization: `Bearer ${token}`,  // Pass token for authentication
             },

@@ -1,6 +1,6 @@
 import React, { useState, useEffect  } from 'react'
-import Header from '../components/Header';
-import Sidemenu from '../components/Sidemenu'
+import Header from './components/Header';
+import Sidemenu from './components/Sidemenu'
 import { fetchAssignments, submitAssignment } from '../api'; 
 import {Link} from 'react-router-dom'
 import Backdrop from '@mui/material/Backdrop';

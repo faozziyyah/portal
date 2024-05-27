@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import Header from '../components/Header';
-import Sidemenu from '../components/Sidemenu'
+import Header from './components/Header';
+import Sidemenu from './components/Sidemenu'
 import Enrolled from './Enrolled';
 
 const Enrolledcourses = () => {

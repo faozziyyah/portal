@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import { Menu, MenuItem } from 'react-pro-sidebar';
-import { Home, People, Contacts } from '@mui/icons-material';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser, faGear } from '@fortawesome/free-solid-svg-icons';
 import {Link} from 'react-router-dom'
-import student from '../assets/College Student.png'
-import arrow from '../assets/chevron-down.png'
-import Logout from './Logout';
+import student from '../../assets/College Student.png'
+import arrow from '../../assets/chevron-down.png'
+import Logout from '../../Logout';
 
 const Profilebar = () => {
 
@@ -41,13 +42,18 @@ const Profilebar = () => {
         <div className='profile-options'>
 
           <Menu>
+            
+            <Link to="/studentdashboard" className='text-left font-semibold'>
+              <MenuItem icon={<FontAwesomeIcon icon={faUser} className='text-xl text-left' />} onClick={handleToggleProfileMenu}>Profile </MenuItem>
+            </Link>
+          
+            <Link to="/studentdashboard" className='text-left font-semibold'>
+              <MenuItem icon={<FontAwesomeIcon icon={faGear} className='text-xl text-left' />}>Setting </MenuItem>
+            </Link>
 
-            <MenuItem icon={<Home />} onClick={handleToggleProfileMenu}>Profile 
-              <Link href="/" />
-            </MenuItem>
-            <MenuItem icon={<Home />}>Favorites</MenuItem>
-            <MenuItem icon={<People/>}>Setting</MenuItem>
-            <Logout />
+              <MenuItem>
+                <Logout />
+              </MenuItem>
             {/*<MenuItem icon={<Contacts />}>Log Out</MenuItem>*/}
 
           </Menu>

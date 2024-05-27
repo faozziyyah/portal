@@ -76,10 +76,19 @@ class CourseSerializer(serializers.ModelSerializer):
     category = CourseCategorySerializer()
     #category = serializers.PrimaryKeyRelatedField(queryset=CourseCategory.objects.all())
     instructor = InstructorSerializer(read_only=True)
+    is_enrolled = serializers.SerializerMethodField()
+    enrolled_students_count = serializers.SerializerMethodField()
    # instructor = UserSerializer()
     class Meta:
         model = Course
-        fields = ['id', 'title', 'category', 'description', 'instructor']
+        fields = ['id', 'title', 'category', 'description', 'instructor', 'is_enrolled', 'enrolled_students_count']
+
+    def get_enrolled_students_count(self, obj):
+        return Enrollment.objects.filter(course=obj).count()
+
+    def get_is_enrolled(self, obj):
+        user = self.context['request'].user
+        return Enrollment.objects.filter(user=user, course=obj).exists()
 
     def create(self, validated_data):
         category_data = validated_data.pop('category')
@@ -119,24 +128,25 @@ class LessonSerializer(serializers.ModelSerializer):
         fields = ['id', 'title', 'content', 'course', 'order']
 
 class EnrollmentSerializer(serializers.ModelSerializer):
-    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), write_only=True)
+    #user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), write_only=True)
     #user = UserSerializer(read_only=True)
     course = serializers.PrimaryKeyRelatedField(queryset=Course.objects.all())
 
     class Meta:
         model = Enrollment
-        fields = ['id', 'user', 'course', 'enrolled_on']
+        fields = ['id', 'course', 'enrolled_on']
 
-    def create(self, validated_data):
-        # Extract user_id and remove it from validated_data
-        user = validated_data.pop('user')
-        course = validated_data.pop('course')
-        #user = User.objects.get(id=user_id)
-        #validated_data['user'] = user
+   #def create(self, validated_data):
+   #    # Extract user_id and remove it from validated_data
+   #    #user = validated_data.pop('user')
+   #    user = self.context['request'].user
+   #    course = validated_data.pop('course')
+   #    #user = User.objects.get(id=user_id)
+   #    #validated_data['user'] = user
 
-        # Create the enrollment
-        enrollment = Enrollment.objects.create(user=user, course=course, **validated_data)
-        return enrollment
+   #    # Create the enrollment
+   #    enrollment = Enrollment.objects.create(user=user, course=course, **validated_data)
+   #    return enrollment
 
 class AssignmentSerializer(serializers.ModelSerializer):
     course = serializers.PrimaryKeyRelatedField(queryset=Course.objects.all())
