@@ -73,8 +73,8 @@ class InstructorSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'first_name', 'last_name']
 
 class CourseSerializer(serializers.ModelSerializer):
-    category = CourseCategorySerializer()
-    #category = serializers.PrimaryKeyRelatedField(queryset=CourseCategory.objects.all())
+    #category = CourseCategorySerializer()
+    category = serializers.PrimaryKeyRelatedField(queryset=CourseCategory.objects.all())
     instructor = InstructorSerializer(read_only=True)
     is_enrolled = serializers.SerializerMethodField()
     enrolled_students_count = serializers.SerializerMethodField()
@@ -91,30 +91,16 @@ class CourseSerializer(serializers.ModelSerializer):
         return Enrollment.objects.filter(user=user, course=obj).exists()
 
     def create(self, validated_data):
-        category_data = validated_data.pop('category')
-        #instructor = validated_data.pop('instructor')
-        #category = self.context['category']
-        instructor = self.context['request'].user
-
-        category, created = CourseCategory.objects.get_or_create(**category_data)
-
-        # Create the course
-        course = Course.objects.create(category=category, instructor=instructor, **validated_data)
-        return course
+        validated_data['instructor'] = self.context['request'].user
+        return super().create(validated_data)
 
     def update(self, instance, validated_data):
-        category_data = validated_data.pop('category')
-        instructor_data = validated_data.pop('instructor')
+        category = validated_data.pop('category', None)
 
-        # Update or create the category
-        category, created = CourseCategory.objects.get_or_create(**category_data)
-
-        # Fetch the instructor
-        instructor = User.objects.get(id=instructor_data['id'])
+        if category:
+            instance.category = category
 
         # Update the course instance
-        instance.category = category
-        instance.instructor = instructor
         instance.title = validated_data.get('title', instance.title)
         instance.description = validated_data.get('description', instance.description)
         instance.save()

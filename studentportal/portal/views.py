@@ -99,6 +99,19 @@ class CourseViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response({'error': 'You are not authorized to view this information.'}, status=status.HTTP_403_FORBIDDEN)
+    
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return Response({'message': 'Course deleted successfully.'}, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['get'], permission_classes=[IsAuthenticated, IsStudent])
     def enrolled(self, request):
@@ -120,9 +133,6 @@ class CourseViewSet(viewsets.ModelViewSet):
             return Response({'message': 'Successfully unenrolled from the course.'}, status=status.HTTP_200_OK)
         except Enrollment.DoesNotExist:
             return Response({'error': 'Enrollment not found.'}, status=status.HTTP_404_NOT_FOUND)
-
-    #def perform_create(self, serializer):
-    #    serializer.save(instructor=self.request.user)
 
 class LessonViewSet(viewsets.ModelViewSet):
     queryset = Lesson.objects.all()
@@ -147,16 +157,6 @@ class EnrollmentViewSet(viewsets.ModelViewSet):
             return Response({"detail": "Successfully unenrolled."}, status=status.HTTP_204_NO_CONTENT)
         except Enrollment.DoesNotExist:
             return Response({"detail": "Enrollment not found."}, status=status.HTTP_404_NOT_FOUND)
-
-#class UserEnrolledCoursesView(generics.ListAPIView):
-#    serializer_class = CourseSerializer
-#    permission_classes = [IsAuthenticated, IsStudent]
-#
-#    def get_queryset(self):
-#        user = self.request.user
-#        enrollments = Enrollment.objects.filter(user=user)
-#        course_ids = enrollments.values_list('course_id', flat=True)
-#        return Course.objects.filter(id__in=course_ids)
 
 class AssignmentViewSet(viewsets.ModelViewSet):
     queryset = Assignment.objects.all()

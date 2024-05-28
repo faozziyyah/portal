@@ -6,8 +6,8 @@ import student from '../assets/College Student.png'
 import bag from '../assets/Backpack.png'
 import laptop from '../assets/laptop.png'
 import chart from '../assets/chart.png'
-import Profilebar from '../students/components/Profilebar'
-import Sidemenu from '../students/components/Sidemenu'
+import Profilebar from './components/Profilebar'
+import Sidemenu from './components/Sidemenu'
 import { fetchAssignmentById } from '../api';
 
 const TeacherDashboard = ({ assignmentId = 1  }) => {

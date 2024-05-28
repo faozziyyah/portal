@@ -59,7 +59,7 @@ code {
 .modal {
   display: none; 
   position: fixed; 
-  z-index: 1; 
+  z-index: 99999999; 
   left: 0;
   top: 0;
   width: 100%;
@@ -78,8 +78,9 @@ code {
   background-color: #fefefe;
   margin: 5% auto;
   padding: 20px;
-  border: 1px solid #888;
-  width: 80%;
+  border: 1px solid #af8be9;
+  border-radius: 10px;
+  width: 50%;
 }
 
 .close-button {
@@ -96,7 +97,7 @@ code {
   cursor: pointer;
 }
 
-.modal-content label {
+/*.modal-content label {
   display: block;
   margin-bottom: 8px;
 }
@@ -120,7 +121,7 @@ code {
 
 #modalbtn:hover {
   opacity: 0.8;
-}
+}*/
 
 .error {
   color: red;

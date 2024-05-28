@@ -1,35 +1,46 @@
 import React, { useEffect, useState } from 'react'
 import {Link} from 'react-router-dom'
 import axiosInstance from '../axiosConfig';
+import { toast } from 'react-toastify';
 import bg from '../assets/bg.jpg'
 import avatar from '../assets/avatar-6.jpg'
 import Modal from './components/Modal';
+import Editcourse from './components/Editcourse';
 
 const TeacherCourseslist = ({ searchTerm }) => {
 
   const [courses, setCourses] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const handleOpenModal = () => setIsModalOpen(true);
-  const handleCloseModal = () => setIsModalOpen(false);
+  const [selectedCourse, setSelectedCourse] = useState(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const handleOpenModal = () => setIsModalOpen(true);
+  const handleCloseModal = () => setIsModalOpen(false);
 
   const handleCourseAdded = (newCourse) => {
     setCourses([...courses, newCourse]);
   };
 
+  const handleEditCourse = (course) => {
+    setSelectedCourse(course);
+    setIsEditModalOpen(true);
+  };
+
   useEffect(() => {
 
     const fetchCourses = async () => {
+
       try {
 
         const response = await axiosInstance.get('/courses/created_by_teacher/');
         setCourses(response.data);
-        console.log(response)
+        //console.log(response)
         setLoading(false);
 
       } catch (error) {
         setError('Error fetching courses');
+        toast.error('Failed to load courses.');
       }
     };
 
@@ -37,10 +48,23 @@ const TeacherCourseslist = ({ searchTerm }) => {
 
   }, []);
 
-  /*const userData = localStorage.getItem('user-info')
-  const userdetail = JSON.parse(userData)
-  const id = userdetail.data.id
-  console.log(id)*/
+  const handleDeleteCourse = async (courseId) => {
+    if (window.confirm('Are you sure you want to delete this course?')) {
+      try {
+        await axiosInstance.delete(`/courses/${courseId}/`);
+        setCourses(courses.filter(course => course.id !== courseId));
+        toast.success('Course deleted successfully!');
+      } catch (error) {
+        toast.error('Failed to delete course.');
+      }
+    }
+  };
+
+
+  const handleCourseUpdated = (updatedCourse) => {
+    setCourses(courses.map(course => (course.id === updatedCourse.id ? updatedCourse : course)));
+    setIsEditModalOpen(false);
+  };
 
   const filteredCourses = courses.filter((course) =>
       course.title.toLowerCase().includes(searchTerm.toLowerCase())
@@ -94,14 +118,32 @@ const TeacherCourseslist = ({ searchTerm }) => {
                   </div>
 
                   <div id='' className='w-full flex justify-around text-left'>
-                    <button className='text-white bg-yellow-600 text-sm rounded-2xl mt-2 flex justify-center px-6 py-1 font-semibold capitalize'>edit</button>
-                    <button className='text-white bg-red-600 text-sm rounded-2xl mt-2 flex justify-center px-6 py-1 font-semibold capitalize'>delete</button>
+
+                    <button onClick={() => handleEditCourse(course)}
+                      className='text-white bg-yellow-600 text-sm rounded-2xl mt-2 flex justify-center px-6 py-1 font-semibold capitalize'
+                    > edit
+                    </button>
+
+                    <button  onClick={() => handleDeleteCourse(course.id)}
+                      className='text-white bg-red-600 text-sm rounded-2xl mt-2 flex justify-center px-6 py-1 font-semibold capitalize'
+                    > delete
+                    </button>
+                  
                   </div>
 
                 </Link>
               ))}
 
             </div>
+
+            {selectedCourse && (
+              <Editcourse
+                open={isEditModalOpen}
+                handleClose={() => setIsEditModalOpen(false)}
+                course={selectedCourse}
+                onCourseUpdated={handleCourseUpdated}
+              />
+            )}
 
           </section>
     

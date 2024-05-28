@@ -2,6 +2,7 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+import { toast } from 'react-toastify';
 
 const Logout = () => {
 
@@ -9,6 +10,7 @@ const Logout = () => {
   
     function logout () {
       localStorage.clear()
+      toast.success('Logout Successful.');
       navigate('/login')
     }
 

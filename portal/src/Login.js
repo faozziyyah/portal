@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from "axios";
 import axiosInstance from './axiosConfig';
+import { toast } from 'react-toastify';
 import img from './assets/Group.png'
 import img1 from './assets/Frame.png'
 
@@ -29,6 +30,7 @@ const Login = () => {
 
       try {
           const response = await axios.post('http://localhost:8000/api/login/', formData);
+          toast.success('Login successful.');
           //console.log('Login successful:', response);
           // Redirect or show success message
           localStorage.setItem('user-info', JSON.stringify(response))
@@ -53,6 +55,7 @@ const Login = () => {
           setLoading(false); 
       } catch (error) {
           console.error('There was an error loggin in:', error);
+          toast.error('Failed to login. Please try again.');
           setError('Failed to login. Please try again.');
           setLoading(false); 
       }

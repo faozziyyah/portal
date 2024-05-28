@@ -3,9 +3,9 @@ import { Menu, MenuItem } from 'react-pro-sidebar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faGear } from '@fortawesome/free-solid-svg-icons';
 import {Link} from 'react-router-dom'
-import student from '../assets/College Student.png'
-import arrow from '../assets/chevron-down.png'
-import Logout from './Logout';
+import student from '../../assets/College Student.png'
+import arrow from '../../assets/chevron-down.png'
+import Logout from '../../Logout';
 
 const Profilebar = () => {
 

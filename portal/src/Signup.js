@@ -1,5 +1,6 @@
 import React, {useState} from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify';
 import img from './assets/Group.png'
 import img1 from './assets/Frame.png'
 import axios from "axios";
@@ -35,14 +36,15 @@ const Signup = () => {
 
         try {
             const response = await axios.post('http://localhost:8000/api/register/', formData);
-            console.log('Registration successful:', response.data);
+            toast.success('Registration successful.');
+            //console.log('Registration successful:', response.data);
             // Redirect or show success message
             localStorage.setItem('signup-id', JSON.stringify(response))
 
             const userData = localStorage.getItem('signup-id')
             const userdetail = JSON.parse(userData)
             const user_type = userdetail.data.user_type
-            console.log(user_type)
+            //console.log(user_type)
 
             if (user_type === 'teacher') {
               navigate('/teacherdashboard');
@@ -53,6 +55,7 @@ const Signup = () => {
             //navigate("/studentdashboard")
         } catch (error) {
             console.error('There was an error registering the user:', error);
+            toast.error('Failed to register. Please try again.');
             setError('Failed to register. Please try again.');
         }
         setLoading(false); 
