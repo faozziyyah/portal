@@ -60,7 +60,6 @@ const TeacherCourseslist = ({ searchTerm }) => {
     }
   };
 
-
   const handleCourseUpdated = (updatedCourse) => {
     setCourses(courses.map(course => (course.id === updatedCourse.id ? updatedCourse : course)));
     setIsEditModalOpen(false);

@@ -119,7 +119,7 @@ const Assignments = ({ assignmentId }) => {
                 
                     <p className='font-semibold capitalize'>{assignment.title}</p>
                     <p className=''>{assignment.description}</p>
-                    <p className=''>Due Date: {assignment.due_date}</p>
+                    <p className=''>Due Date: {new Date(assignment.due_date).toLocaleString()}</p>
                     <p className=''>Status</p>
                     <p className='font-semibold' onClick={handleOpen}>Submit</p>
 

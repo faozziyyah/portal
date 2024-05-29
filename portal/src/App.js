@@ -9,6 +9,7 @@ import TeacherDashboard from './teacher/Dashboard';
 import TeacherCourses from './teacher/Courses';
 import Login from './Login';
 import Signup from './Signup';
+import TeacherAssignments from './teacher/Assignments';
 
 const PrivateRoute = ({ children }) => {
   const userType = localStorage.getItem('user_type');
@@ -44,6 +45,7 @@ function App() {
         <Route path='/assignments' element={<Assignments />} />
         <Route path='/teacherdashboard' element={<PrivateRoute><TeacherDashboard /></PrivateRoute>} />
         <Route path='/teachercourses' element={<TeacherCourses />} />
+        <Route path='/assignmentscreated' element={<TeacherAssignments />} />
         <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
 

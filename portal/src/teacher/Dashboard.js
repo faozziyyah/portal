@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom'
 import bell from '../assets/bell-ringing.png'
 import cap from '../assets/Scholarcapscroll.png'
@@ -26,6 +27,7 @@ const TeacherDashboard = ({ assignmentId = 1  }) => {
             fetchAssignment(token, assignmentId);
         } else {
             setLoading(false);
+            toast.error('Access token not found.');
             setError('Access token not found.');
         }
     }, [assignmentId]);
@@ -37,6 +39,7 @@ const TeacherDashboard = ({ assignmentId = 1  }) => {
             setLoading(false);
         } catch (error) {
             setError('Failed to fetch assignment.');
+            toast.error('Failed to fetch assignment.');
             setLoading(false);
         }
     };
@@ -159,7 +162,7 @@ const TeacherDashboard = ({ assignmentId = 1  }) => {
                 
                 <p className='font-semibold capitalize'>{assignment.title}</p>
                 <p className=''>{assignment.description}</p>
-                <p className=''>Due Date: {assignment.due_date}</p>
+                <p className=''>Due Date: {new Date(assignment.due_date).toLocaleString()}</p>
                 <p className=''>Edit</p>
                 <p className='font-semibold'>Delete</p>
                 

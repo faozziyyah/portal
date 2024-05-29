@@ -38,7 +38,7 @@ const Sidemenu = () => {
               <MenuItem icon={<FontAwesomeIcon icon={faBook} className='text-purple-700 text-xl' />}>Courses</MenuItem>
             </Link>
             
-            <Link to="/teachercourses" className='text-left font-semibold'>
+            <Link to="/assignmentscreated" className='text-left font-semibold'>
               <MenuItem icon={<FontAwesomeIcon icon={faListCheck} className='text-purple-700 text-xl' />}>Assignments</MenuItem>
             </Link>
             

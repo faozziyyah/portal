@@ -142,25 +142,25 @@ class AssignmentSerializer(serializers.ModelSerializer):
         model = Assignment
         fields = ['id', 'title', 'description', 'course', 'due_date']
 
-    def create(self, validated_data):
-        course = validated_data.pop('course')
-
-        # Create the course
-        assignment = Assignment.objects.create(course=course, **validated_data)
-        return assignment
-
-    def update(self, instance, validated_data):
-        course_data = validated_data.pop('course')
-
-        # Update or create the category
-        course, created = Course.objects.get_or_create(**course_data)
-
-        # Update the course instance
-        instance.course = course
-        instance.title = validated_data.get('title', instance.title)
-        instance.description = validated_data.get('description', instance.description)
-        instance.save()
-        return instance
+    #def create(self, validated_data):
+    #    course = validated_data.pop('course')
+#
+    #    # Create the course
+    #    assignment = Assignment.objects.create(course=course, **validated_data)
+    #    return assignment
+#
+    #def update(self, instance, validated_data):
+    #    course_data = validated_data.pop('course')
+#
+    #    # Update or create the category
+    #    course, created = Course.objects.get_or_create(**course_data)
+#
+    #    # Update the course instance
+    #    instance.course = course
+    #    instance.title = validated_data.get('title', instance.title)
+    #    instance.description = validated_data.get('description', instance.description)
+    #    instance.save()
+    #    return instance
 
 class SubmissionSerializer(serializers.ModelSerializer):
     #assignment = AssignmentSerializer()

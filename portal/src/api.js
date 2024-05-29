@@ -18,13 +18,27 @@ export const fetchEnrolledCourses = async (token) => {
 
 export const fetchAssignments = async (token) => {
     try {
-        const response = await axios.get(`${API_URL}/assignments/`, {
+        const response = await axios.get(`${API_URL}/user-assignments/`, {
             headers: {
                 Authorization: `Bearer ${token}`,  // Pass token for authentication
             },
         });
         return response.data;
     } catch (error) {
+        throw error;
+    }
+};
+
+export const fetchTeacherAssignments = async (token) => {
+    try {
+        const response = await axios.get(`${API_URL}/courses/assignments/`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching assignments:', error);
         throw error;
     }
 };

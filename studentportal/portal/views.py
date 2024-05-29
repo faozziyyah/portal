@@ -134,6 +134,14 @@ class CourseViewSet(viewsets.ModelViewSet):
         except Enrollment.DoesNotExist:
             return Response({'error': 'Enrollment not found.'}, status=status.HTTP_404_NOT_FOUND)
 
+    @action(detail=False, methods=['get'], permission_classes=[permissions.IsAuthenticated, IsTeacher])
+    def assignments(self, request):
+        user = request.user
+        courses = Course.objects.filter(instructor=user)
+        assignments = Assignment.objects.filter(course__in=courses)
+        serializer = AssignmentSerializer(assignments, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 class LessonViewSet(viewsets.ModelViewSet):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
@@ -162,6 +170,20 @@ class AssignmentViewSet(viewsets.ModelViewSet):
     queryset = Assignment.objects.all()
     serializer_class = AssignmentSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+    def get_permissions(self):
+        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+            self.permission_classes = [permissions.IsAuthenticated, IsTeacher]
+        return super().get_permissions()
+
+    def perform_create(self, serializer):
+        serializer.save()
+
+    def perform_update(self, serializer):
+        serializer.save()
+
+    def perform_destroy(self, instance):
+        instance.delete()
 
 class UserAssignmentsView(generics.ListAPIView):
     serializer_class = AssignmentSerializer
