@@ -73,6 +73,23 @@ class ProfileViewSet(viewsets.ModelViewSet):
     serializer_class = ProfileSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+    def get_object(self):
+        return Profile.objects.get(user=self.request.user)
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        return Response(serializer.data)
+
+    def get_queryset(self):
+        # Only allow the user to update their own profile
+        return self.queryset.filter(user=self.request.user)
+
 class CourseCategoryViewSet(viewsets.ModelViewSet):
     serializer_class = CourseCategorySerializer
     queryset = CourseCategory.objects.all()

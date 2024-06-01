@@ -10,11 +10,48 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'email', 'first_name', 'last_name']
 
 class ProfileSerializer(serializers.ModelSerializer):
-    #user = UserSerializer()
     class Meta:
         model = Profile
-        fields = ['user_type', 'bio']
-        #fields = ['user', 'user_type', 'bio']
+        fields = ['id', 'first_name', 'last_name', 'username', 'email', 'bio', 'profile_pic', 
+                'cover_image','phone_number', 'gender', 'location', 'updated_at', 'user_type',
+        ]
+        read_only_fields = ['user', 'updated_at', 'user_type', 'username', 'email',]
+
+    def update(self, instance, validated_data):
+        #user_data = validated_data.pop('user', None)
+        user = instance.user
+        # Handle profile picture update
+        profile_pic = validated_data.pop('profile_pic', None)
+        if profile_pic:
+            instance.profile_pic = profile_pic
+        
+        ## Update other fields
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+#
+        instance.save()
+#
+        #user.username = user_data.get('username', user.username)
+        #user.email = user_data.get('email', user.email)
+        #user.first_name = user_data.get('first_name', user.first_name)
+        #user.last_name = user_data.get('last_name', user.last_name)
+        #user.save()
+        #instance.bio = validated_data.get('bio', instance.bio)
+        #instance.phone_number = validated_data.get('phone_number', instance.phone_number)
+        #instance.gender = validated_data.get('gender', instance.gender)
+        #instance.location = validated_data.get('location', instance.location)
+        #instance.profile_pic = validated_data.get('profile_pic', instance.profile_pic)
+        #instance.cover_image = validated_data.get('cover_image', instance.cover_image)
+        #instance.save()
+#
+        #if user_data:
+        #    user.username = user_data.get('username', user.username)
+        #    user.email = user_data.get('email', user.email)
+        #    user.first_name = user_data.get('first_name', user.first_name)
+        #    user.last_name = user_data.get('last_name', user.last_name)
+        #    user.save()
+
+        return instance
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)

@@ -114,7 +114,7 @@ const Assignments = ({ assignmentId }) => {
             {assignments.map((assignment) => (
 
                 <Link href='/dashboard/coursedetail' key={assignment.id}
-                    className='bg-purple-200 bgpurpl flex justify-around items-center text-center rounded-lg py-2 border-2 border-purple-700'
+                    className='bg-purple-200 bgpurpl flex justify-around items-center text-center rounded-lg py-2 border-2 border-purple-700 mt-4'
                 >
                 
                     <p className='font-semibold capitalize'>{assignment.title}</p>

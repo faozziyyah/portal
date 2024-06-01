@@ -21,6 +21,12 @@ const TeacherDashboard = ({ assignmentId = 1  }) => {
   const userdetail = JSON.parse(userData)
   const username = userdetail.data.username
 
+  const getCurrentDate = () => {
+    const today = new Date();
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return today.toLocaleDateString(undefined, options);
+  };
+
     useEffect(() => {
         const token = localStorage.getItem('access_token');  // Get token from local storage
         if (token) {
@@ -92,7 +98,7 @@ const TeacherDashboard = ({ assignmentId = 1  }) => {
         <section className='hero mt-8 flex justify-between rounded-2xl pt-3'>
 
           <aside className='flex flex-col ml-4 items-start text-white mb-8'>
-            <p className='text-xs mt-4 text-slate-300'>January 27, 2024</p>
+            <p className='text-xs mt-4 text-slate-300 font-semibold'>{getCurrentDate()}</p>
             <h3 className='mt-8 text-3xl font-semibold text-left'>Welcome back, {username}!</h3>
             <p className='text-xs text-slate-300 font-semibold mt-2'>Always stay updated in your Instructor portal</p>
           </aside>

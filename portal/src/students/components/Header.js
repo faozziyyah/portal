@@ -3,7 +3,7 @@ import { Menu, MenuItem } from 'react-pro-sidebar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faGear } from '@fortawesome/free-solid-svg-icons';
 import {Link} from 'react-router-dom'
-import student from '../../assets/College Student.png'
+//import student from '../../assets/College Student.png'
 //import arrow from '../assets/chevron-down.png'
 import bell from '../../assets/bell-ringing.png'
 import Logout from '../../Logout';
@@ -19,6 +19,10 @@ const Header = ({ searchTerm, handleSearchChange }) => {
     const userData = localStorage.getItem('user-info')
     const userdetail = JSON.parse(userData)
     const username = userdetail.data.username
+
+    const userProfile = localStorage.getItem('user-profile')
+    const profiledetail = JSON.parse(userProfile)
+    const profilepic = profiledetail.data.profile_pic
 
   return (
     <section className='flex justify-between items-center mt-4'>  
@@ -40,7 +44,7 @@ const Header = ({ searchTerm, handleSearchChange }) => {
 
         <div className='profile-header flex items-center justify-between mr-2'>
 
-          <img src={student} className='rounded-full bg-purple-500' alt='' width='50' height='50' />
+          <img src={profilepic} className='rounded-full bg-purple-500' alt='' width='50' height='50' />
 
           <div className='w-2/4'>
             <h3 className='font-bold text-sm'>{username}</h3>

@@ -10,6 +10,8 @@ import TeacherCourses from './teacher/Courses';
 import Login from './Login';
 import Signup from './Signup';
 import TeacherAssignments from './teacher/Assignments';
+import Profile from './students/Profile';
+import TeacherProfile from './teacher/Profile';
 
 const PrivateRoute = ({ children }) => {
   const userType = localStorage.getItem('user_type');
@@ -40,12 +42,14 @@ function App() {
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<Signup />} />
         <Route path='/studentdashboard' element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+        <Route path='/studentprofile' element={<Profile />} />
         <Route path='/courses' element={<Courses />} />
         <Route path='/enrolled-courses' element={<Enrolledcourses />} />
         <Route path='/assignments' element={<Assignments />} />
         <Route path='/teacherdashboard' element={<PrivateRoute><TeacherDashboard /></PrivateRoute>} />
         <Route path='/teachercourses' element={<TeacherCourses />} />
         <Route path='/assignmentscreated' element={<TeacherAssignments />} />
+        <Route path='/teacherprofile' element={<TeacherProfile />} />
         <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
 

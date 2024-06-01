@@ -3,20 +3,42 @@ from django.contrib.auth.models import User, Group
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+def user_directory_path(instance, filename):
+    # file will be uploaded to MEDIA_ROOT/profilepic/<user_id>/<filename>
+    return f'profilepic/{instance.user.id}_{filename}'
+
+def cover_directory_path(instance, filename):
+    # file will be uploaded to MEDIA_ROOT/profilepic/<user_id>/<filename>
+    return f'coverimages/{instance.user.id}_{filename}'
+
 # Create your models here.
 
 class Profile(models.Model):
+
     USER_TYPES = (
         ('student', 'Student'),
         ('teacher', 'Teacher'),
         ('admin', 'Admin'),
     )
 
+    GENDER_CHOICES = (
+        ("Male", "Male"),
+        ("Female", "Female"),
+    )
+
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     user_type = models.CharField(max_length=20, choices=USER_TYPES)
+    first_name = models.CharField(max_length=100, blank=True)
+    last_name = models.CharField(max_length=100, blank=True)
+    username = models.CharField(max_length=100, blank=True)
+    email = models.EmailField(max_length=100, blank=True, null=True)
     bio = models.TextField(blank=True, null=True)
-    profile_pic = models.FileField(upload_to='profilepic/')
-    # Add other fields as needed (e.g., profile picture, etc.)
+    profile_pic = models.ImageField(upload_to=user_directory_path, blank=True, null=True)
+    cover_image = models.ImageField(upload_to=cover_directory_path, blank=True, null=True)
+    phone_number = models.CharField(max_length=20, blank=True, null=True)
+    gender = models.CharField(max_length=15, choices=GENDER_CHOICES, blank=True, null=True,)
+    location = models.CharField(max_length=50, blank=True, null=True,)
+    updated_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.user.username

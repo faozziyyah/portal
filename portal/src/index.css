@@ -111,31 +111,14 @@ code {
   cursor: pointer;
 }
 
-/*.modal-content label {
-  display: block;
-  margin-bottom: 8px;
+.profile-card {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 1rem;
+  background-color: #fff;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
-
-.modal-content input, .modal-content textarea {
-  width: 100%;
-  padding: 8px;
-  margin: 8px 0;
-  box-sizing: border-box;
-}
-
-#modalbtn {
-  background-color: #4CAF50;
-  color: white;
-  padding: 14px 20px;
-  margin: 8px 0;
-  border: none;
-  cursor: pointer;
-  width: 100%;
-}
-
-#modalbtn:hover {
-  opacity: 0.8;
-}*/
 
 .error {
   color: red;

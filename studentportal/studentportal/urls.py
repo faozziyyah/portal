@@ -16,23 +16,18 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include, re_path
-#from portal.views import CustomRegisterView, CustomLoginView, get_csrf_token
 from .swagger import schema_view
 from rest_framework_simplejwt import views as jwt_views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('portal.urls')),
-    #path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    #path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
-    #path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),# DRF's login/logout
-    #path('dj-rest-auth/', include('dj_rest_auth.urls')),  # Login/Logout
-    #path('dj-rest-auth/login/', CustomLoginView.as_view(), name='rest_login'),
-    #path('dj-rest-auth/registration/', include('dj_rest_auth.registration.urls')),  # Registration
-    #path('dj-rest-auth/registration/custom/', CustomRegisterView.as_view(), name='custom_register'),
-    #path('api/get-csrf-token/', get_csrf_token, name='get_csrf_token'),
     re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+] 
 
-]
+if settings.DEBUG:  # Only serve static files during development
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
