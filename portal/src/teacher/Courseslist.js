@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import {Link} from 'react-router-dom'
 import axiosInstance from '../axiosConfig';
 import { toast } from 'react-toastify';
@@ -6,6 +6,7 @@ import bg from '../assets/bg.jpg'
 import avatar from '../assets/avatar-6.jpg'
 import Modal from './components/Modal';
 import Editcourse from './components/Editcourse';
+import { UserProfileContext } from '../UserProfileContext';
 
 const TeacherCourseslist = ({ searchTerm }) => {
 
@@ -13,6 +14,7 @@ const TeacherCourseslist = ({ searchTerm }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const { profile } = useContext(UserProfileContext);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const handleOpenModal = () => setIsModalOpen(true);
@@ -107,7 +109,7 @@ const TeacherCourseslist = ({ searchTerm }) => {
 
                   <div className='flex justify-between w-full'>
                     <p className='text-purple-700 font-bold text-sm mt-2 ml-2'>Category: {course.category.title}</p>
-                    <img src={avatar} alt='' width='60' height='0' className='rounded-full' style={{position: 'relative', zIndex: '99999', top: '-2em', right: '2em'}} />
+                    <img src={profile.profile_pic ? profile.profile_pic : avatar} alt='' width='60' height='0' className='rounded-full' style={{position: 'relative', zIndex: '99999', top: '-2em', right: '2em'}} />
                   </div>
 
                   <div id='div' className='w-full text-left'>

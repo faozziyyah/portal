@@ -1,20 +1,19 @@
-import React, {useState} from 'react'
+import React, {useState, useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from "axios";
 import axiosInstance from './axiosConfig';
 import { toast } from 'react-toastify';
 import img from './assets/Group.png'
 import img1 from './assets/Frame.png'
+import { UserProfileContext } from './UserProfileContext';
 
-const Login = () => {
+const Login = ({ profileId }) => {
 
   const navigate = useNavigate();
-
   const [loading, setLoading] = useState(false);
-
   const [formData, setFormData] = useState({ username: '', password: '', });
-
   const [error, setError] = useState(null);
+  const { updateProfile } = useContext(UserProfileContext);
 
   const handleChange = (e) => {
     setFormData({
@@ -38,10 +37,21 @@ const Login = () => {
           localStorage.setItem('refresh_token', response.data.refresh);
           axiosInstance.defaults.headers['Authorization'] = `Bearer ${response.data.access}`;
 
-          const userData = localStorage.getItem('user-info')
-          const userdetail = JSON.parse(userData)
+          // Fetch the user profile data
+          const profileResponse = await axiosInstance.get(`/profiles/${profileId}/`, {
+            headers: {
+              Authorization: `Bearer ${response.data.access}`,
+            },
+          });
+    
+          const userProfile = profileResponse.data;
+          updateProfile(userProfile); // Update the context
+          localStorage.setItem('user-profile', JSON.stringify(userProfile)); // Update local storage    
+
+          //const userData = localStorage.getItem('user-info')
+          //const userdetail = JSON.parse(userData)
           //const username = userdetail.data.username
-          const user_type = userdetail.data.user_type
+          const user_type = userProfile.user_type
           //console.log(username)
           //console.log(user_type)
 

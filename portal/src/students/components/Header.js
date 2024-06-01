@@ -1,28 +1,36 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { Menu, MenuItem } from 'react-pro-sidebar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faGear } from '@fortawesome/free-solid-svg-icons';
 import {Link} from 'react-router-dom'
-//import student from '../../assets/College Student.png'
-//import arrow from '../assets/chevron-down.png'
+import student from '../../assets/College Student.png'
+import { UserProfileContext } from '../../UserProfileContext';
 import bell from '../../assets/bell-ringing.png'
 import Logout from '../../Logout';
+import {ThreeDots} from 'react-loader-spinner';
 
 const Header = ({ searchTerm, handleSearchChange }) => {
 
     const [profileMenu, setProfileMenu] = useState(false);
+    const { profile } = useContext(UserProfileContext);
   
     const handleToggleProfileMenu = () => {
       setProfileMenu(!profileMenu);
     };
 
+    if (!profile) {
+        return (
+            <div className='loader-container'>
+                <ThreeDots visible={true} height='80' width='80' color="#4fa94d" radius="9" ariaLabel="three-dots-loading"
+                  wrapperStyle={{}} wrapperClass=""
+                />
+            </div>
+        );
+    }
+
     const userData = localStorage.getItem('user-info')
     const userdetail = JSON.parse(userData)
     const username = userdetail.data.username
-
-    const userProfile = localStorage.getItem('user-profile')
-    const profiledetail = JSON.parse(userProfile)
-    const profilepic = profiledetail.data.profile_pic
 
   return (
     <section className='flex justify-between items-center mt-4'>  
@@ -44,11 +52,11 @@ const Header = ({ searchTerm, handleSearchChange }) => {
 
         <div className='profile-header flex items-center justify-between mr-2'>
 
-          <img src={profilepic} className='rounded-full bg-purple-500' alt='' width='50' height='50' />
+          <img src={profile.profile_pic ? profile.profile_pic : student} className='rounded-full bg-purple-500' alt='' width='50' height='50' />
 
           <div className='w-2/4'>
             <h3 className='font-bold text-sm'>{username}</h3>
-            <p className='text-xs font-semibold capitalize'>student</p>
+            <p className='text-xs font-semibold capitalize'>{profile.user_type ? profile.user_type : "student"}</p>
           </div>
 
           <svg className="h-5 w-5 flex-none text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" 

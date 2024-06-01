@@ -17,7 +17,7 @@ const Signup = () => {
         password: '',
         first_name: '',
         last_name: '',
-        user_type: '', // Default role
+        user_type: 'student', // Default role
     });
 
     const [error, setError] = useState(null);
@@ -107,7 +107,7 @@ const Signup = () => {
               name="user_type" value={formData.user_type} onChange={handleChange} required 
             >
                 <option value="student">Student</option>
-                <option value="instructor">Instructor</option>
+                <option value="teacher">Teacher</option>
                 <option value="admin">Admin</option>
             </select>
           </div>
